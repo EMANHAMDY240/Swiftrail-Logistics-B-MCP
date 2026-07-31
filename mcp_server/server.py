@@ -36,6 +36,20 @@ def get_shipment_status(shipment_id: int) -> str:
         return f"No shipment found with id {shipment_id}"
     return json.dumps(row, default=str)
 
+@app.tool()
+def list_customer_invoices(customer_id: int) -> str:
+    """List all invoices for a customer, including paid, unpaid, and overdue amounts."""
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM invoices WHERE customer_id = %s", (customer_id,))
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+
+    if not rows:
+        return f"No invoices found for customer {customer_id}"
+    return json.dumps(rows, default=str)
+
 
 if __name__ == "__main__":
     asyncio.run(app.run_stdio_async())
