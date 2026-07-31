@@ -31,7 +31,7 @@ CREATE TABLE shipments (
 CREATE TABLE invoices (
     id            INT PRIMARY KEY AUTO_INCREMENT,
     customer_id   INT NOT NULL,
-    shipment_id   INT,
+    shipment_id   INT UNIQUE,
     amount        DECIMAL(12,2) NOT NULL CHECK (amount > 0),
     due_date      DATE NOT NULL,
     paid_status   ENUM('unpaid','paid','overdue') NOT NULL DEFAULT 'unpaid',

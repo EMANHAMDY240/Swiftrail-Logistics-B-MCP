@@ -1,0 +1,73 @@
+erDiagram
+    EMPLOYEES ||--o{ SHIPMENTS : "requests"
+    EMPLOYEES ||--o{ CREDIT_HOLDS : "releases"
+    EMPLOYEES ||--o{ RATE_EXCEPTIONS : "requests"
+    EMPLOYEES ||--o{ RATE_EXCEPTIONS : "approves"
+
+    CUSTOMERS ||--o{ SHIPMENTS : "places"
+    CUSTOMERS ||--o{ INVOICES : "billed"
+    CUSTOMERS ||--o{ CREDIT_HOLDS : "held"
+
+    SHIPMENTS ||--|| INVOICES : "billed via"
+    SHIPMENTS ||--o{ RATE_EXCEPTIONS : "discounted via"
+
+    EMPLOYEES {
+        int id PK
+        string name
+        string email
+        string role
+    }
+
+    CUSTOMERS {
+        int id PK
+        string name
+        decimal credit_limit
+        decimal balance_due
+        string credit_status
+    }
+
+    SHIPMENTS {
+        int id PK
+        int customer_id FK
+        string origin
+        string destination
+        string railcar_id
+        decimal base_rate
+        decimal final_rate
+        string status
+        int requested_by FK
+        timestamp created_at
+    }
+
+    INVOICES {
+        int id PK
+        int customer_id FK
+        int shipment_id FK
+        decimal amount
+        date due_date
+        string paid_status
+        int days_overdue
+    }
+
+    CREDIT_HOLDS {
+        int id PK
+        int customer_id FK
+        string reason
+        string severity
+        string status
+        timestamp placed_at
+        int released_by FK
+        timestamp released_at
+    }
+
+    RATE_EXCEPTIONS {
+        int id PK
+        int shipment_id FK
+        int requested_by FK
+        decimal discount_pct
+        string justification
+        string status
+        int approved_by FK
+        timestamp created_at
+        timestamp resolved_at
+    }
