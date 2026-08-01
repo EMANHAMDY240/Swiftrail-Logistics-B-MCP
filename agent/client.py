@@ -49,8 +49,8 @@ from contextlib import AsyncExitStack
 
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
-from mcp.client.streamable_http import streamablehttp_client
-from mcp.shared.context import RequestContext
+from mcp.client.streamable_http import streamable_http_client as streamablehttp_client
+from mcp.client.session import ClientRequestContext as RequestContext
 from mcp.types import (
     ElicitResult,
     CreateMessageResult,
@@ -100,11 +100,11 @@ class SwiftrailAgent:
 
         init_result = await self.session.initialize()
         self.server_capabilities = init_result.capabilities
-        self.server_info = init_result.serverInfo
+        self.server_info = init_result.server_info
 
         print("=" * 64)
         print("HANDSHAKE COMPLETE (initialize / initialized)")
-        print(f"  Server: {self.server_info.name} (protocol {init_result.protocolVersion})")
+        print(f"  Server: {self.server_info.name} (protocol {init_result.protocol_version})")
         print("  Declared server capabilities:")
         print(f"    tools     : {self.server_capabilities.tools}")
         print(f"    resources : {self.server_capabilities.resources}")
@@ -162,7 +162,7 @@ class SwiftrailAgent:
         print("\n" + "!" * 64)
         print("SERVER PAUSED THE CALL: elicitation/create")
         print(f"  {params.message}")
-        schema_props = (params.requestedSchema or {}).get("properties", {})
+        schema_props = (params.requested_schema or {}).get("properties", {})
         print("  The server needs the following, from a human:")
         for field_name, field_schema in schema_props.items():
             desc = field_schema.get("description", "")
