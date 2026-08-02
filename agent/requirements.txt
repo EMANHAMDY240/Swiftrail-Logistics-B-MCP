@@ -1,4 +1,4 @@
-mcp>=1.2.0
+mcp>=1.2.
 pymysql
 pydantic
 python-dotenv
